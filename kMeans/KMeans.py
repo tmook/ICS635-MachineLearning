@@ -62,18 +62,18 @@ class kMeans:
    ## each true cluster set. Then taking the minimum miss-classified points for each results
    ## cluster and summing them up for a total miss classified points.
    def resultsAccuracy(self, dataset, trueClusterDataSet):
-      resultClusterDataSet = self.getLabelPoints(dataset)
+      resultsClusterDataSet = self.getLabelPoints(dataset)
       if len(trueClusterDataSet) != len(resultsClusterDataSet):
          print "ERROR: number of clusters not same between true and results dataset"
       else:
          totalMissClassPoints = 0
-         for resultsCluster in resultClusterDataSet:
+         for trueCluster in trueClusterDataSet:
             minErrors = -1
-            for trueCluster in trueClusterDataSet:
+            for resultsCluster in resultsClusterDataSet:
                currentErrors = 0
-               for truePoint in trueCluster:
+               for resultsPoint in resultsCluster:
                   #check if true point in current true cluster exists in the results cluster
-                  if truePoint not in resultsCluster:
+                  if resultsPoint not in trueCluster:
                      currentErrors +=1
                #if errors found in current cluster is small that previous cluser, update min error
                if (minErrors < 0) or (currentErrors < minErrors):
@@ -81,7 +81,7 @@ class kMeans:
             totalMissClassPoints += minErrors
 
          ## calculate accuracy
-         return float(totalMissClassPoints) / gd.getTotalDataPoints()
+         return 1-( float(totalMissClassPoints) / len(dataset) )
       ## if number of clusters not same for results and true dataset return -1 for error
       return -1
 
@@ -244,24 +244,41 @@ if __name__ == "__main__":
    accuracy = float(totalMissClassPoints) / len(data)
    ##accuracy
    print 100 - 100*accuracy
-   print "should just have printed 100.0"
-   trueClusterPoints = [[ [5,5],[-4,-5],[-6,-5],[-5,-4],[-5,-6] ] ,[ [-5,-5],[4,5],[6,5],[5,4],[5,6] ],[ [5,-5],[4,-5],[6,-5],[5,-4],[5,-6]],[[-5,5],[-4,5],[-6,5],[-5,4],[-5,6]]]
+   a1 =  100 - 100*accuracy
+   if a1 != 100.0:
+      print "should just have calculated 100.0"
+   if a1 != (100*km.resultsAccuracy(data, trueClusterPoints)):
+      print "ERROR with km.resultsAccuracy()",km.resultsAccuracy(data, trueClusterPoints)
+   #trueClusterPoints = [[ [5,5],[-4,-5],[-6,-5],[-5,-4],[-5,-6] ] ,[ [-5,-5],[4,5],[6,5],[5,4],[5,6] ],[ [5,-5],[4,-5],[6,-5],[5,-4],[5,-6]],[[-5,5],[-4,5],[-6,5],[-5,4],[-5,6]]]
+   trueClusterPoints = [[] ,[ [5,5],[4,5],[6,5],[5,4],[5,6] ],[ [5,-5],[4,-5],[6,-5],[5,-4],[5,-6]],[[-5,5],[-4,5],[-6,5],[-5,4],[-5,6]]]
    resultClusterPoints = km.getLabelPoints(data)
    ## get Accuracy of results
    totalMissClassPoints = 0
-   for rCP in resultClusterPoints:
+   #for rCP in resultClusterPoints:
+   for trueCP in trueClusterPoints:
       minErrors = -1
-      for trueCP in trueClusterPoints:
+      #for trueCP in trueClusterPoints:
+      for rCP in resultClusterPoints:
          currentErrors = 0
-         for truePoint in trueCP:
-            if truePoint not in rCP:
+         #for truePoint in trueCP:
+         for resultsPoint in rCP:
+            #if truePoint not in rCP:
+            if resultsPoint not in trueCP:
                currentErrors +=1
+         #print currentErrors
          if (minErrors < 0) or (currentErrors < minErrors):
             minErrors = currentErrors
       totalMissClassPoints += minErrors
+      #print ""
    accuracy = float(totalMissClassPoints) / len(data)
    ##accuracy
    print 100 - 100*accuracy
+   a2 =  100 - 100*accuracy
+   if a2 != 75.0:
+      print "should just have calculated 75.0"
+   print km.resultsAccuracy(data, trueClusterPoints)
+   if a2 != (100*km.resultsAccuracy(data, trueClusterPoints)):
+      print "ERROR with km.resultsAccuracy()",km.resultsAccuracy(data, trueClusterPoints)
 
    #km.plotResults(data,show=True)
    centroids = km.getCentroids()

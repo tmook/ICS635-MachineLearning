@@ -4,7 +4,6 @@ import numpy as np
 class GaussianData:
    def __init__(self, fileName=None):
       #init all member variables
-      self.DataSet = []
       self.ClusterDataSet = []
       self.trueCenters = []
       self.totalClusters = 0
@@ -40,9 +39,6 @@ class GaussianData:
 
       #add generated data to ClusterDataSet
       self.ClusterDataSet.append(list(generatedSet))
-      #add generated data to DataSet
-      for point in generatedSet:
-         self.DataSet.append(list(point))
       #store center point
       self.trueCenters.append(list(center))
       #increment number of clusters
@@ -77,7 +73,11 @@ class GaussianData:
 
 
    def getDataSet(self):
-      return list(self.DataSet)
+      dataset = []
+      for cluster in self.ClusterDataSet:
+         for point in cluster:
+            dataset.append(point)
+      return list(dataset)
 
 
    def getClusterDataSet(self):
@@ -93,7 +93,10 @@ class GaussianData:
 
 
    def getTotalDataPoints(self):
-      return len(self.DataSet)
+      total = 0
+      for cluster in self.ClusterDataSet:
+         total += len(cluster)
+      return total
 
 
    def getInfo(self):
@@ -109,7 +112,6 @@ class GaussianData:
 
    ## this function clears the dataset
    def clearAll(self):
-      self.DataSet = []
       self.ClusterDataSet = []
       self.trueCenters = []
       self.totalClusters = 0
@@ -135,6 +137,32 @@ class GaussianData:
 
 ###### Run this test of this script is main
 if __name__ == "__main__":
+   gd = GaussianData()
+   gd.generateCluster()
+   gd.generateCluster()
+   gd.generateCluster()
+   gd.generateCluster()
+   if gd.getTotalDataPoints() != 40:
+      print "ERROR with get total data points"
+   gd.getInfo()
+
+   print "------------"
+   gd = GaussianData()
+   gd.generateCluster()
+   gd.generateCluster()
+   gd.generateCluster()
+   gd.generateCluster()
+   dataset =  gd.getDataSet()
+   clusterdataset =  gd.getClusterDataSet()
+   for point in dataset:
+      print point
+   print ""
+   print ""
+   for cluster in clusterdataset:
+      print cluster
+   gd.getInfo()
+
+   print "------------"
    gd = GaussianData()
    gd.generateCluster()
    print gd.getDataSet()

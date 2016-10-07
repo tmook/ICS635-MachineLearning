@@ -197,6 +197,42 @@ if __name__ == "__main__":
    data = [ [-5,-5],[5,5],[-4,-5],[-6,-5],[-5,-4],[-5,-6],[6,5],[4,5],[5,4],[5,6] ,[-5,5], [-4,5],[-6,5],[-5,4],[-5,6],[5,-5],[4,-5],[6,-5],[5,-4],[5,-6]]
    km = kMeans(4, 300)
    output = km.fit(data, centroids=[[-5.0, -5.0], [5.0, 5.0], [5.0, -5.0], [-5.0, 5.0]])
+   trueClusterPoints = [[ [-5,-5],[-4,-5],[-6,-5],[-5,-4],[-5,-6] ] ,[ [5,5],[4,5],[6,5],[5,4],[5,6] ],[ [5,-5],[4,-5],[6,-5],[5,-4],[5,-6]],[[-5,5],[-4,5],[-6,5],[-5,4],[-5,6]]]
+   resultClusterPoints = km.getLabelPoints(data)
+   ## get Accuracy of results
+   totalMissClassPoints = 0
+   for rCP in resultClusterPoints:
+      minErrors = -1
+      for trueCP in trueClusterPoints:
+         currentErrors = 0
+         for truePoint in trueCP:
+            if truePoint not in rCP:
+               currentErrors +=1
+         if (minErrors < 0) or (currentErrors < minErrors):
+            minErrors = currentErrors
+      totalMissClassPoints += minErrors
+   accuracy = float(totalMissClassPoints) / len(data)
+   ##accuracy
+   print 100 - 100*accuracy
+   print "should just have printed 100.0"
+   trueClusterPoints = [[ [5,5],[-4,-5],[-6,-5],[-5,-4],[-5,-6] ] ,[ [-5,-5],[4,5],[6,5],[5,4],[5,6] ],[ [5,-5],[4,-5],[6,-5],[5,-4],[5,-6]],[[-5,5],[-4,5],[-6,5],[-5,4],[-5,6]]]
+   resultClusterPoints = km.getLabelPoints(data)
+   ## get Accuracy of results
+   totalMissClassPoints = 0
+   for rCP in resultClusterPoints:
+      minErrors = -1
+      for trueCP in trueClusterPoints:
+         currentErrors = 0
+         for truePoint in trueCP:
+            if truePoint not in rCP:
+               currentErrors +=1
+         if (minErrors < 0) or (currentErrors < minErrors):
+            minErrors = currentErrors
+      totalMissClassPoints += minErrors
+   accuracy = float(totalMissClassPoints) / len(data)
+   ##accuracy
+   print 100 - 100*accuracy
+
    #km.plotResults(data,show=True)
    centroids = km.getCentroids()
    print centroids

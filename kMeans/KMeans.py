@@ -56,6 +56,36 @@ class kMeans:
          self.Centroids.append(random.choice(dataset))
    
 
+   ##calculate accuracy of results on dataset
+   ## accuracy is calculated by total miss-classified points over total number of points.
+   ## total miss classified points is calculated by comparing each results cluster set with
+   ## each true cluster set. Then taking the minimum miss-classified points for each results
+   ## cluster and summing them up for a total miss classified points.
+   def resultsAccuracy(self, dataset, trueClusterDataSet):
+      resultClusterDataSet = self.getLabelPoints(dataset)
+      if len(trueClusterDataSet) != len(resultsClusterDataSet):
+         print "ERROR: number of clusters not same between true and results dataset"
+      else:
+         totalMissClassPoints = 0
+         for resultsCluster in resultClusterDataSet:
+            minErrors = -1
+            for trueCluster in trueClusterDataSet:
+               currentErrors = 0
+               for truePoint in trueCluster:
+                  #check if true point in current true cluster exists in the results cluster
+                  if truePoint not in resultsCluster:
+                     currentErrors +=1
+               #if errors found in current cluster is small that previous cluser, update min error
+               if (minErrors < 0) or (currentErrors < minErrors):
+                  minErrors = currentErrors
+            totalMissClassPoints += minErrors
+
+         ## calculate accuracy
+         return float(totalMissClassPoints) / gd.getTotalDataPoints()
+      ## if number of clusters not same for results and true dataset return -1 for error
+      return -1
+
+
    ##find euclidean distance between two points
    def euclideanDist(self, pointA, pointB):
       return ( (pointB[0] - pointA[0])**2 + (pointB[1] - pointA[1])**2 )**0.5

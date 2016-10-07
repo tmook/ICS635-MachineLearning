@@ -24,6 +24,23 @@ def Experiment1():
    data = gd.getDataSet()
    km = kMeans(5)
    km.fit(data)
+   trueClusterPoints = gd.getClusterDataSet()
+   resultClusterPoints = km.getLabelPoints(data)
+   ## get Accuracy of results
+   totalMissClassPoints = 0
+   for rCP in resultClusterPoints:
+      minErrors = -1
+      for trueCP in trueClusterPoints:
+         currentErrors = 0
+         for truePoint in trueCP:
+            if truePoint not in rCP:
+               currentErrors +=1
+         if (minErrors < 0) or (currentErrors < minErrors):
+            minErrors = currentErrors
+      totalMissClassPoints += minErrors
+   accuracy = float(totalMissClassPoints) / gd.getTotalDataPoints()
+   ##accuracy
+   print 100 - 100*accuracy
    km.plotResults(data,trueCentroids=gd.getTrueCenters(),filename="experiment1",show=True)
 
 
@@ -79,19 +96,11 @@ def Experiment2():
 
 
 
-###############################################
-### Experiment 3                            ###
-### Accuracy 
-###############################################
-def Experiment3():
-    pass
-
-
 
 
 
 ### uncomment a test to run Experiements ###
-#Experiment1()
+Experiment1()
 #Experiment2()
 
 

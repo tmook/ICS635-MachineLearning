@@ -32,6 +32,14 @@ class kMeans:
       return list(self.labels)
 
 
+   ##get labelPoints
+   def getLabelPoints(self,data):
+      labelPoints = [ [] for i in range(0,self.K)]
+      for idx, lbl in enumerate(self.labels):
+         labelPoints[lbl].append(data[idx])
+      return list(labelPoints)
+
+
    ##get centroids
    def getCentroids(self):
       return list(self.Centroids)
@@ -210,10 +218,16 @@ if __name__ == "__main__":
    output = km.fit(data)
    if km.getTotalIterations() != 3:
       print "sometime wrong with iterations check (could also picked THE centroids on randomization)", km.getTotalIterations()
-   
+
    km.setMaxIterations(300)
    km.setK(2)
    print km.fit(data)
+   resultsClusterData = km.getLabelPoints(data)
+   print resultsClusterData
    km.setK(4)
    print km.fit(data)
+   resultsClusterData = km.getLabelPoints(data)
+   print resultsClusterData
+
+
 

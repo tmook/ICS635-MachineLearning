@@ -5,7 +5,7 @@ class GaussianData:
    def __init__(self, fileName=None):
       #init all member variables
       self.DataSet = []
-      self.ClusterDataSet[]
+      self.ClusterDataSet = []
       self.trueCenters = []
       self.totalClusters = 0
       self.totalDataPoints = []
@@ -110,7 +110,7 @@ class GaussianData:
    ## this function clears the dataset
    def clearAll(self):
       self.DataSet = []
-      self.ClusterDataSet[]
+      self.ClusterDataSet = []
       self.trueCenters = []
       self.totalClusters = 0
       self.totalDataPoints = []

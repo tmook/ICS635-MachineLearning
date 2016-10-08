@@ -109,7 +109,7 @@ class kMeans:
    
 
    ## apply labels to points
-   def fit(self, data=[], centroids=[]):
+   def fit(self, data=[], centroids=[], plotFileName=None, plotIon=-1):
       #initialize/reset  labels, max iterations, converged, dataSet, and initial centroids
       self.Centroids = []
       self.labels = []
@@ -124,6 +124,11 @@ class kMeans:
          self.Centroids = list(centroids)
 
       while (self.maxIterations > 0) and (not converged):
+         #plot each iteration
+         if plotFileName:
+            self.plotResults(dataSet, filename=plotFileName+"."+str(self.getTotalIterations()), title="Iteration "+str(self.getTotalIterations()), ion=plotIon)
+         elif plotIon > -1:
+            self.plotResults(dataSet, title="Iteration "+str(self.getTotalIterations()),ion=plotIon)
          currentLabels = []
          #for each point in dataset
          for point in dataSet:
@@ -168,7 +173,7 @@ class kMeans:
 
 
    ##Create plot of results
-   def plotResults(self, data=[], filename=None, trueCentroids=[], show=False):
+   def plotResults(self, data=[], filename=None, trueCentroids=[], title=None, ion=-1, show=False):
       import matplotlib
       matplotlib.use('TkAgg')
       import matplotlib.pyplot as pyplot
@@ -180,9 +185,13 @@ class kMeans:
       #plot data set with o as marker
       for i in range(0,len(data)):
          #pyplot.plot(data[i][0],data[i][1],color=colors[self.labels[i]],marker="o",)
-         sc = pyplot.scatter(data[i][0],data[i][1],s=45,c=self.labels[i]+1,cmap=colorMap,norm=colorNorm,marker="o",)
+         if i < len(self.labels):
+            cLabel = self.labels[i]+1
+         else:
+            cLabel = 0
+         sc = pyplot.scatter(data[i][0],data[i][1],s=45,c=cLabel,cmap=colorMap,norm=colorNorm,marker="o",)
       #plot centroids with daimond as marker
-      pyplot.scatter(self.Centroids[0][0],self.Centroids[0][1],color="green",marker="d",s=128, label="Final Centroids")
+      pyplot.scatter(self.Centroids[0][0],self.Centroids[0][1],color="green",marker="d",s=128, label="Centroids")
       for i in range(1,len(self.Centroids)):
          pyplot.scatter(self.Centroids[i][0],self.Centroids[i][1],color="green",marker="d",s=128)
       #plot true centroids with * as marker
@@ -191,7 +200,10 @@ class kMeans:
          for i in range(1,len(self.Centroids)):
             pyplot.scatter(trueCentroids[i][0],trueCentroids[i][1],color="black",marker="*",s=128)
 
-      pyplot.title("Converged in "+str(self.getTotalIterations())+" iterations")
+      if title:
+         pyplot.title(title)
+      else:
+         pyplot.title("Converged in "+str(self.getTotalIterations())+" iterations")
       pyplot.legend(loc='best')
       pyplot.colorbar(sc, ticks=range(1,self.K+1), label="Cluster")
       #pyplot.grid(True, which='both')
@@ -199,7 +211,10 @@ class kMeans:
       if filename != None:
          pyplot.savefig(filename+".png",bbox_inchex='tight')
          print "Figure saved to file '"+filename+".png'"
-      if show:
+      if (ion > -1):
+         pyplot.ion()
+         pyplot.pause(ion)
+      elif show:
          pyplot.show()
       #clear figure
       pyplot.clf()
@@ -312,5 +327,8 @@ if __name__ == "__main__":
    resultsClusterData = km.getLabelPoints(data)
    print resultsClusterData
 
-
+   km = kMeans(4, 300)
+   #km.fit(data, plotIon=3)
+   km.fit(data, plotFileName="test1")
+   #km.fit(data, plotFileName="test1", plotIon=3)
 

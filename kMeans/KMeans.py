@@ -329,6 +329,6 @@ if __name__ == "__main__":
 
    km = kMeans(4, 300)
    #km.fit(data, plotIon=3)
-   km.fit(data, plotFileName="test1")
+   #km.fit(data, plotFileName="test1")
    #km.fit(data, plotFileName="test1", plotIon=3)
 

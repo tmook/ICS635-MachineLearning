@@ -1,4 +1,4 @@
-#/usr/bin/python
+#!/usr/bin/env python
 
 # input dataset is of x and y coordinates in a list, as a list (e.g. [ [1,2], [2,1], [-1,-2], [1,-2] ] )
 # default values of k=2 and maxIter=300

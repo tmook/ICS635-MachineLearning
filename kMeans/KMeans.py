@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
+# Hard kMeans algorithm
 # input dataset is of x and y coordinates in a list, as a list (e.g. [ [1,2], [2,1], [-1,-2], [1,-2] ] )
 # default values of k=2 and maxIter=300
-# output is a list of labels of which corresponging xy values it belongs to.
+# output is a list of labels of which corresponding xy values it belongs to.
 import random
 
 
